@@ -364,6 +364,9 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 					case "VersionComments":
 						project.VersionComments = manifest.Properties[prop];
 						break;
+					case "Description":
+						project.Description = manifest.Properties[prop];
+						break;
 				}
 			}
 		}
