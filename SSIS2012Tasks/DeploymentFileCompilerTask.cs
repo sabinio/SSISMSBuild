@@ -192,6 +192,8 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 							if (Guid.TryParse(key, out guid))
 							{
 								var setting = ProjectConfiguration.Options.ParameterConfigurationValues[key];
+								Log.LogMessage("Setting conf value: " + setting.Name.Replace("Project::", "") + " = " + setting.Value);
+								project.Parameters[setting.Name.Replace("Project::", "")].Value = setting.Value;
 								parameterSet.Add(key, setting);
 							}
 						}
