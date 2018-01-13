@@ -46,9 +46,6 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.AnalysisServices.Project">
-      <HintPath>$(VS140COMNTOOLS)\..\IDE\PrivateAssemblies\Microsoft.AnalysisServices.Project.DLL</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Build.Utilities.v4.0" />
