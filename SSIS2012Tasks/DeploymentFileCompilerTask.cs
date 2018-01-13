@@ -120,7 +120,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 			if (m_projectConfiguration == null)
 			{
-				throw new Exception("Configuration not found");
+				throw new Exception(String.Format(SR.ConfigNotFound, Configuration));
 			}
 		}
 
@@ -148,7 +148,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 					{
 						// Determine output directory
 						string projectOutputPath = GetOutputPath(outputDirectory);
-						Log.LogMessage(SR.OutputDirectory(projectOutputPath));
+						Log.LogMessage(SR.OutputDirectory, projectOutputPath);
 
 						// Create project and set properties
 						var project = Project.CreateProject();
@@ -157,7 +157,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 						// set the protection level
 						var protectionLevel = GetProtectionLevel(Manifest);
-						Log.LogMessage(SR.ProjectLevel(protectionLevel));
+						Log.LogMessage(SR.ProjectLevel, protectionLevel);
 						project.ProtectionLevel = protectionLevel;
 
 						if (PasswordNeeded(protectionLevel))
@@ -178,7 +178,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 						foreach (var p in projectParameters.Parameters)
 						{
-							Log.LogMessage(SR.AddProjectParameter(p.Name));
+							Log.LogMessage(SR.AddProjectParameter, p.Name);
 							var parameter = project.Parameters.Add(p.Name, (TypeCode) Int32.Parse(p.Properties["DataType"]));
 							parameter.LoadFromXML(p.GetXml(), new DefaultEvents());
 						}
@@ -192,8 +192,9 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 							if (Guid.TryParse(key, out guid))
 							{
 								var setting = ProjectConfiguration.Options.ParameterConfigurationValues[key];
-								Log.LogMessage("Setting conf value: " + setting.Name.Replace("Project::", "") + " = " + setting.Value);
-								project.Parameters[setting.Name.Replace("Project::", "")].Value = setting.Value;
+								var paramName = setting.Name.Replace("Project::", "");
+								Log.LogMessage(SR.ConfigProjectSetting, paramName);
+								project.Parameters[paramName].Value = setting.Value;
 								parameterSet.Add(key, setting);
 							}
 						}
@@ -203,7 +204,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 						foreach (var c in Manifest.ConnectionManagers)
 						{
 							var path = GetConnectionManagerPath(projectDirectory, c);
-							Log.LogMessage(SR.LoadingConnectionManager(path));
+							Log.LogMessage(SR.LoadingConnectionManager, path);
 
 							var cmXml = File.ReadAllText(path);
 							var connMgr = (ProjectConnectionManager) connectionManagerSerializer.Deserialize(new StringReader(cmXml));
@@ -222,7 +223,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 							// check the protection level
 							if (package.ProtectionLevel != protectionLevel)
 							{
-								Log.LogMessage(SR.PackageProtectionLevel(protectionLevel));
+								Log.LogMessage(SR.PackageProtectionLevel, protectionLevel);
 								package.ProtectionLevel = protectionLevel;
 								if (PasswordNeeded(protectionLevel))
 								{
@@ -244,7 +245,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 						var version = GetProjectVersion();
 						if (version != null)
 						{
-							Log.LogMessage(SR.ProjectVersionChange(version));
+							Log.LogMessage(SR.ProjectVersionChange, version);
 							project.VersionMajor = version.Major;
 							project.VersionMinor = version.Minor;
 							project.VersionBuild = version.Build;
@@ -258,7 +259,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 						// Save project
 						string projectPath = GetProjectFilePath(projectOutputPath, project);
-						Log.LogMessage(SR.SavingProject(projectPath));
+						Log.LogMessage(SR.SavingProject, projectPath);
 
 						project.SaveTo(projectPath);
 						project.Dispose();
@@ -294,7 +295,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 					var configSetting = set[parameter.ID];
 					parameter.Value = configSetting.Value;
 
-					Log.LogMessage(SR.ConfigSetting(configSetting.Name));
+					Log.LogMessage(SR.ConfigPackageSetting, configSetting.Name);
 
 					// remove parameter
 					set.Remove(parameter.ID);
@@ -399,7 +400,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 		{
 			Package pkg;
 
-			Log.LogMessage(SR.LoadingPackage(path));
+			Log.LogMessage(SR.LoadingPackage, path);
 			try
 			{
 				var xml = File.ReadAllText(path);
@@ -409,7 +410,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 			}
 			catch (Exception e)
 			{
-				Log.LogError(SR.ErrorLoadingPackage(path, e.Message));
+				Log.LogError(SR.ErrorLoadingPackage, path, e.Message);
 				throw;
 			}
 
@@ -418,7 +419,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 		private void DeserializeProject(string project)
 		{
-			Log.LogMessage(SR.LoadingProject(project));
+			Log.LogMessage(SR.LoadingProject, project);
 
 			var xmlOverrides = new XmlAttributeOverrides();
 			ProjectConfigurationOptions.PrepareSerializationOverrides(typeof(DataTransformationsProjectConfigurationOptions), SerializationLevel.Project, xmlOverrides);

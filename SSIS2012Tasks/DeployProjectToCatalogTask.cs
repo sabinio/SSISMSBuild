@@ -73,7 +73,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 			          		DataSource = Instance, IntegratedSecurity = true, InitialCatalog = Catalog, ConnectTimeout = 600
 			          	};
 
-			Log.LogMessage(SR.ConnectingToServer(csb.ConnectionString));
+			Log.LogMessage(SR.ConnectingToServer, csb.ConnectionString);
 
 			using (var conn = new SqlConnection(csb.ConnectionString))
 			{
@@ -110,7 +110,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
 
 						try
 						{
-							Log.LogMessage(SR.DeployingProject(projectPath));
+							Log.LogMessage(SR.DeployingProject, projectPath);
 							deploymentCmd.ExecuteNonQuery();
 						}
 						catch (Exception)
@@ -189,7 +189,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
             cmd.CommandTimeout = SqlCommandTimeout;
 			cmd.Parameters.AddWithValue("folder_name", folder);
 
-			Log.LogMessage(SR.CreatingFolder(folder));
+			Log.LogMessage(SR.CreatingFolder, folder);
 			cmd.ExecuteNonQuery();
 		}
 
@@ -200,7 +200,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
             cmd.Parameters.AddWithValue("folder_name", folder);
             cmd.Parameters.AddWithValue("environment_name", environment);
 
-            Log.LogMessage(SR.CreatingEnvironment(environment));
+            Log.LogMessage(SR.CreatingEnvironment, environment);
             cmd.ExecuteNonQuery();
         }
 
@@ -214,7 +214,7 @@ namespace Microsoft.SqlServer.IntegrationServices.Build
             cmd.Parameters.AddWithValue("reference_type", "R");
             cmd.Parameters.AddWithValue("reference_id", SqlDbType.BigInt).Direction = ParameterDirection.Output;
 
-            Log.LogMessage(SR.CreatingEnvironmentReference(environment));
+            Log.LogMessage(SR.CreatingEnvironmentReference, environment);
             cmd.ExecuteNonQuery();
         }
 

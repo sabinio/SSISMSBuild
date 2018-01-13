@@ -158,8 +158,8 @@
     <comment>.
  Parameters: 0 - path (string) </comment>
   </data>
-  <data name="ConfigSetting" xml:space="preserve">
-    <value>Setting value for '{0}'</value>
+  <data name="ConfigPackageSetting" xml:space="preserve">
+    <value>Setting package parameter '{0}'</value>
     <comment>.
  Parameters: 0 - param (string) </comment>
   </data>
@@ -204,5 +204,11 @@
   </data>
   <data name="CreatingEnvironmentReference" xml:space="preserve">
     <value>Creating environment reference '{0}'</value>
+  </data>
+  <data name="ConfigNotFound" xml:space="preserve">
+    <value>Configuration not found '{0}'</value>
+  </data>
+  <data name="ConfigProjectSetting" xml:space="preserve">
+    <value>Setting project parameter '{0}'</value>
   </data>
 </root>
